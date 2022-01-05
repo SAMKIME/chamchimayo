@@ -1,10 +1,7 @@
-package com.slub.chamchimayo.domain;
+package com.slub.chamchimayo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
@@ -16,14 +13,14 @@ public class Member {
     protected Member() {
     }
 
-    public Member(Long id, String name, String phoneNumber) {
-        this.id = id;
+    public Member(String name, String phoneNumber, String mail) {
         this.name = name;
         this.phoneNumber = phoneNumber;
+        this.mail = mail;
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "member_id")
     private Long id;
 
@@ -32,5 +29,8 @@ public class Member {
 
     @Column
     private String phoneNumber;
+
+    @Column
+    private String mail;
 
 }

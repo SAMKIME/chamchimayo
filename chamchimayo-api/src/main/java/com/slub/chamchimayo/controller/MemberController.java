@@ -1,17 +1,17 @@
 package com.slub.chamchimayo.controller;
 
-import com.slub.chamchimayo.domain.Member;
+import com.slub.chamchimayo.dto.MemberCrudDto;
+import com.slub.chamchimayo.entity.Member;
 import com.slub.chamchimayo.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -21,27 +21,38 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/members/new")
-    public String create(@RequestBody Member member) {
-        Member newMember = new Member(member.getId(), member.getName(), member.getPhoneNumber());
-        memberService.join(newMember);
-        return "ok";
+    public String create(@RequestBody MemberCrudDto memberDto) {
+
+        try {
+            memberService.join(new Member(memberDto.getName(), memberDto.getPhoneNumber(), memberDto.getMail()));
+        } catch (IllegalStateException e) {
+            return "이미 존재하는 회원입니다.";
+        }
+        return "created";
     }
 
     @GetMapping("/members")
-    public Member select(@RequestBody Member member) {
-        Long memberId = member.getId();
-        return memberService.findOne(memberId);
+    public Optional<Member> select(@RequestBody MemberCrudDto memberDto) {
+        return memberService.findOneByMail(memberDto.getMail());
     }
 
     @PostMapping("/members/update")
-    public void update(@RequestBody Member member) {
-        Long memberId = member.getId();
-        memberService.update(memberId, member.getName(), member.getPhoneNumber());
+    public String update(@RequestBody MemberCrudDto memberDto) {
+        try {
+            memberService.update(memberDto.getName(), memberDto.getPhoneNumber(), memberDto.getMail());
+        } catch (NoSuchElementException e) {
+            return "존재하지 않는 회원입니다";
+        }
+        return "updated";
     }
 
     @PostMapping("/members/delete")
-    public void delete(@RequestBody Member member) {
-        Long memberId = member.getId();
-        memberService.deleteOne(memberId);
+    public String delete(@RequestBody MemberCrudDto memberDto) {
+        try {
+            memberService.deleteOne(memberDto.getMail());
+        } catch (NoSuchElementException e) {
+            return "존재하지 않는 회원입니다";
+        }
+        return "deleted";
     }
 }
