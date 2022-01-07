@@ -31,7 +31,6 @@ subprojects {
 
 		compileOnly 'org.projectlombok:lombok'
 		annotationProcessor 'org.projectlombok:lombok'
-
 	}
 
 	test {
@@ -41,6 +40,12 @@ subprojects {
 
 //각 프로젝트에서만 사용하는 의존성 추가
 project(':chamchimayo-api') {
+	dependencies {
+		compile project(':chamchimayo-common')
+	}
+}
+
+project(':chamchimayo-web') {
 	dependencies {
 		compile project(':chamchimayo-common')
 	}
