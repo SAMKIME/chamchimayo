@@ -44,3 +44,9 @@ project(':chamchimayo-api') {
 		compile project(':chamchimayo-common')
 	}
 }
+
+project(':chamchimayo-web') {
+	dependencies {
+		compile project(':chamchimayo-common')
+	}
+}
