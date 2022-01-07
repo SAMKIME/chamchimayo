@@ -1,4 +1,5 @@
 rootProject.name = 'chamchimayo'
 include 'chamchimayo-api'
 include 'chamchimayo-common'
+include 'chamchimayo-web'
 
