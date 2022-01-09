@@ -1,18 +1,16 @@
 package com.slub.chamchimayo.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
-    protected Member() {
-    }
-
+    @Builder
     public Member(String name, String phoneNumber, String mail) {
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -32,4 +30,9 @@ public class Member {
 
     @Column
     private String mail;
+
+    public void setNameAndPhoneNumber(String name, String phoneNumber) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
 }
