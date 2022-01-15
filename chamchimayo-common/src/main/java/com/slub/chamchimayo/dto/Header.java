@@ -1,10 +1,8 @@
-package com.slub.chamchimayo.network;
+package com.slub.chamchimayo.dto;
 
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Builder
 @Getter
@@ -19,7 +17,7 @@ public class Header<T> {
     private T data;
 
     public static <T> Header<T> OK() {
-        return (Header<T>)Header.builder()
+        return (Header<T>) Header.builder()
             .transactionTime(LocalDateTime.now())
             .resultCode("OK")
             .description("OK")
@@ -27,7 +25,7 @@ public class Header<T> {
     }
 
     public static <T> Header<T> OK(T data) {
-        return (Header<T>)Header.builder()
+        return (Header<T>) Header.builder()
             .transactionTime(LocalDateTime.now())
             .resultCode("OK")
             .description("OK")
@@ -36,7 +34,7 @@ public class Header<T> {
     }
 
     public static <T> Header<T> ERROR(String description) {
-        return (Header<T>)Header.builder()
+        return (Header<T>) Header.builder()
             .transactionTime(LocalDateTime.now())
             .resultCode("ERROR")
             .description(description)

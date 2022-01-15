@@ -1,14 +1,14 @@
-package com.slub.chamchimayo.network.request;
+package com.slub.chamchimayo.dto.request;
 
 import com.slub.chamchimayo.entity.Team;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Builder
 @Getter
-@Setter
-public class TeamApiRequest {
+public class TeamRequest {
+
+    private Long id;
 
     private String name;
 

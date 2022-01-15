@@ -11,7 +11,9 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Optional<Team> findByName(String name);
 
+    Optional<List<Team>> findAllByArea(String area);
+
     Optional<List<Team>> findAllBySports(String sports);
 
-    Optional<List<Team>> findAllByArea(String area);
+    Optional<List<Team>> findAllByAreaAndSports(String area, String sports);
 }

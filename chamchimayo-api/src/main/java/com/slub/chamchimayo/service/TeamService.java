@@ -1,12 +1,14 @@
 package com.slub.chamchimayo.service;
 
 import com.slub.chamchimayo.entity.Team;
-import com.slub.chamchimayo.network.Header;
-import com.slub.chamchimayo.network.request.TeamApiRequest;
-import com.slub.chamchimayo.network.response.TeamApiResponse;
+import com.slub.chamchimayo.dto.request.TeamRequest;
+import com.slub.chamchimayo.dto.response.TeamResponse;
+import com.slub.chamchimayo.exception.DuplicatedTeamNameException;
+import com.slub.chamchimayo.exception.TeamNotFoundException;
 import com.slub.chamchimayo.repository.TeamRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,80 +18,82 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
 
-    public Header<TeamApiResponse> create(Header<TeamApiRequest> request) {
+    public TeamResponse create(TeamRequest teamRequest) {
 
-        TeamApiRequest teamApiRequest = request.getData();
+        teamRepository.findByName(teamRequest.getName())
+            .ifPresent(selectTeam -> {
+                throw new DuplicatedTeamNameException("중복된 팀명 입니다.");
+            });
 
-        Optional<Team> team = teamRepository.findByName(teamApiRequest.getName());
-        team.ifPresent(selectTeam -> {
-            Header.ERROR("중복된 팀명 입니다.");
-        });
-
-        Team newTeam = teamRepository.save(teamApiRequest.toEntity());
-        return response(newTeam);
+        Team newTeam = teamRepository.save(teamRequest.toEntity());
+        return TeamResponse.from(newTeam);
     }
 
-    public Header<TeamApiResponse> searchByName(String name) {
+    public TeamResponse searchById(Long id) {
 
-        return teamRepository.findByName(name)
-            .map(team -> response(team))
-            .orElseGet(
-                () -> Header.ERROR("조건에 맞는 팀이 없습니다.")
-            );
+        Optional<Team> team = teamRepository.findById(id);
+        team.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
+
+        return TeamResponse.from(team.get());
     }
 
-    public Header<List<Team>> searchByArea(String area) {
+    public TeamResponse searchByName(String name) {
 
-        return teamRepository.findAllByArea(area)
-            .map(team -> Header.OK(team))
-            .orElseGet(
-                () -> Header.ERROR("조건에 맞는 팀이 없습니다.")
-            );
+        Optional<Team> team = teamRepository.findByName(name);
+        team.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
+
+        return TeamResponse.from(team.get());
     }
 
-    public Header<List<Team>> searchBySports(String sports) {
+    public List<TeamResponse> searchByArea(String area) {
 
-        return teamRepository.findAllBySports(sports)
-            .map(team -> Header.OK(team))
-            .orElseGet(
-                () -> Header.ERROR("조건에 맞는 팀이 없습니다.")
-            );
+        Optional<List<Team>> teamList = teamRepository.findAllByArea(area);
+        teamList.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
+
+        return teamList.get()
+            .stream()
+            .map(TeamResponse::from)
+            .collect(Collectors.toList());
     }
 
-    public Header<TeamApiResponse> update(Header<TeamApiRequest> request) {
+    public List<TeamResponse> searchBySports(String sports) {
 
-        TeamApiRequest teamApiRequest = request.getData();
+        Optional<List<Team>> teamList = teamRepository.findAllBySports(sports);
+        teamList.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
 
-        return teamRepository.findByName(teamApiRequest.getName())
+        return teamList.get()
+            .stream()
+            .map(TeamResponse::from)
+            .collect(Collectors.toList());
+    }
+
+    public List<TeamResponse> searchByAreaAndSports(String area, String sports) {
+
+        Optional<List<Team>> teamList = teamRepository.findAllByAreaAndSports(area, sports);
+        teamList.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
+
+        return teamList.get()
+            .stream()
+            .map(TeamResponse::from)
+            .collect(Collectors.toList());
+    }
+
+    public void updateTeamName(TeamRequest teamRequest) {
+
+        teamRepository.findById(teamRequest.getId())
             .map(team -> {
-                team.updateTeam(teamApiRequest);
+                team.updateTeamName(teamRequest);
                 return team;
             })
             .map(team -> teamRepository.save(team))
-            .map(team -> response(team))
-            .orElseGet(() -> Header.ERROR("존재하지 않는 팀입니다."));
-
+            .map(team -> TeamResponse.from(team));
     }
 
-    public Header delete(String name) {
+    public void delete(Long id) {
 
-        return teamRepository.findByName(name)
-            .map(team -> {
-                teamRepository.delete(team);
-                return Header.OK();
-            })
-            .orElseGet(() -> Header.ERROR("존재하지 않는 팀입니다."));
-    }
+        Optional<Team> team = teamRepository.findById(id);
 
-    private Header<TeamApiResponse> response(Team team) {
+        teamRepository.delete(team.get());
 
-        TeamApiResponse teamApiResponse = TeamApiResponse.builder()
-            .id(team.getId())
-            .name(team.getName())
-            .area(team.getArea())
-            .sports(team.getSports())
-            .build();
-
-        return Header.OK(teamApiResponse);
     }
 }

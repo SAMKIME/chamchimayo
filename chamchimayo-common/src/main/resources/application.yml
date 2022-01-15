@@ -2,8 +2,10 @@ spring:
   jpa:
     properties:
       hibernate:
-        show_sql: true
+#        show_sql: true
         format_sql: true
+    hibernate:
+      ddl-auto: create
   datasource:
     url: jdbc:mysql://localhost:3306/slub?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
     username: root
