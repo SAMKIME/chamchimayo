@@ -1,0 +1,18 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== Hello Restdoc
+=== 소제목
+
+* CURL Request
+include::{snippets}/helloRestdoc/curl-request.adoc[]
+* HTTP Request
+include::{snippets}/helloRestdoc/http-request.adoc[]
+* HTTP Response
+include::{snippets}/helloRestdoc/http-response.adoc[]
+//추후 추가해주세요
+//* HTTP Headers
+//include::{snippets}/helloRestdoc/request-headers.adoc[]
+//* Request Parameters
+//include::{snippets}/helloRestdoc/request-parameters.adoc[]
