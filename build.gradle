@@ -1,4 +1,3 @@
-//빌드시
 buildscript {
     ext {
         springBootVersion = "2.6.2"
@@ -16,7 +15,6 @@ plugins {
     id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
-// 하위 모든 프로젝트 공통 세팅
 subprojects {
     group = 'com.slub'
     version = '0.0.1-SNAPSHOT'
