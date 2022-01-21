@@ -16,19 +16,19 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/loginSuccess")
-    public ModelAndView index(ModelAndView md) {
-
+    public String index(Model model) {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
-        log.info("로그인 성공");
-
         if (user != null) {
-            md.addObject("userName", user.getName());
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("userEmail", user.getEmail());
         }
 
-        md.setViewName("loginSuccess");
+        log.info("[로그인 성공]");
+        log.info("userName : " + user.getName());
+        log.info("userEmail : " + user.getEmail());
 
-        return md;
+        return "loginSuccess";
     }
 
     @GetMapping("/loginFailure")
