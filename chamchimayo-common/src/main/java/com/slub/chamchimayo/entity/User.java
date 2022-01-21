@@ -1,5 +1,6 @@
 package com.slub.chamchimayo.entity;
 
+import com.slub.chamchimayo.entity.enums.Role;
 import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
 import lombok.*;
 
@@ -18,14 +19,14 @@ public class User {
     @Column
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String name;
-
-    @Column
-    private String gender;
 
     @Column(nullable = false)
     private String email;
+
+    @Column
+    private String gender;
 
     @Column
     private String mobile;
@@ -33,14 +34,19 @@ public class User {
     @Column
     private String area;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Builder
-    public User(String name, String gender, String email, String mobile, String area) {
-            validateName(name);
-            this.name = name;
-            this.gender = gender;
-            this.email = email;
-            this.mobile = mobile;
-            this.area = area;
+    public User(String name, String gender, String email, String mobile, String area, Role role) {
+        validateName(name);
+        this.name = name;
+        this.gender = gender;
+        this.email = email;
+        this.mobile = mobile;
+        this.area = area;
+        this.role = role;
     }
 
     private void validateName(String name) {
@@ -63,5 +69,15 @@ public class User {
 
     public void changeArea(String area) {
         this.area = area;
+    }
+
+    public User update(String name){
+        this.name = name;
+
+        return this;
+    }
+
+    public String getRoleKey(){
+        return this.role.getKey();
     }
 }

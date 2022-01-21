@@ -1,4 +1,4 @@
-package com.slub.chamchimayo.dto;
+package com.slub.chamchimayo.dto.request;
 
 import lombok.*;
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+</head>
+<body>
+
+<h2> SSO 테스트</h2>
+<br/>
+<br/>
+<a href="javascript:;" class="btn_social" data-social="google">구글 로그인</a><br/>
+<a href="javascript:;" class="btn_social" data-social="naver">네이버 로그인</a><br/>
+<a href="javascript:;" class="btn_social" data-social="kakao">카카오톡 로그인</a><br/>
+
+
+<script>
+  let socials = document.getElementsByClassName("btn_social");
+  for (let social of socials) {
+    social.addEventListener('click', function () {
+      let socialType = this.getAttribute('data-social');
+      location.href = "/oauth2/authorization/" + socialType;
+    })
+  }
+</script>
+</body>
+</html>

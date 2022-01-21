@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ChamchimayoCommonApplication {
+public class ChamchimayoCommonTestApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ChamchimayoCommonApplication.class, args);
+        SpringApplication.run(ChamchimayoCommonTestApplication.class, args);
     }
 
 }
