@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,42 +38,13 @@ public class TeamService {
         return TeamResponse.from(team.get());
     }
 
-    public TeamResponse searchByName(String name) {
+    public List<TeamResponse> searchTeam(Specification<Team> spec) {
 
-        Optional<Team> team = teamRepository.findByName(name);
-        team.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
+        List<Team> teamList = teamRepository.findAll(spec);
+        if (teamList.isEmpty())
+            throw (new TeamNotFoundException("존재하는 팀이 없습니다."));
 
-        return TeamResponse.from(team.get());
-    }
-
-    public List<TeamResponse> searchByArea(String area) {
-
-        Optional<List<Team>> teamList = teamRepository.findAllByArea(area);
-        teamList.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
-
-        return teamList.get()
-            .stream()
-            .map(TeamResponse::from)
-            .collect(Collectors.toList());
-    }
-
-    public List<TeamResponse> searchBySports(String sports) {
-
-        Optional<List<Team>> teamList = teamRepository.findAllBySports(sports);
-        teamList.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
-
-        return teamList.get()
-            .stream()
-            .map(TeamResponse::from)
-            .collect(Collectors.toList());
-    }
-
-    public List<TeamResponse> searchByAreaAndSports(String area, String sports) {
-
-        Optional<List<Team>> teamList = teamRepository.findAllByAreaAndSports(area, sports);
-        teamList.orElseThrow(() -> new TeamNotFoundException("존재하는 팀이 없습니다."));
-
-        return teamList.get()
+        return teamList
             .stream()
             .map(TeamResponse::from)
             .collect(Collectors.toList());

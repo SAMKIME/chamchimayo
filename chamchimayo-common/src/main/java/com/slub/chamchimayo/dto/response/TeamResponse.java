@@ -12,7 +12,7 @@ public class TeamResponse {
 
     private String name;
 
-    private String area;
+    private String region;
 
     private String sports;
 
@@ -20,7 +20,7 @@ public class TeamResponse {
         return TeamResponse.builder()
             .id(team.getId())
             .name(team.getName())
-            .area(team.getArea())
+            .region(team.getRegion())
             .sports(team.getSports())
             .build();
     }
