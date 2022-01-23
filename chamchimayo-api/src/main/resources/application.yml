@@ -3,16 +3,16 @@ spring:
     include: oauth
 
   datasource:
-    url: jdbc:mysql://localhost:3306/chamchimayo?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: samkime
+    url: jdbc:mysql://db-9a75i.pub-cdb.ntruss.com:3306/chamchimayo?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: user
+    password: Samkim2!
     driver-class-name: com.mysql.cj.jdbc.Driver
-#  jackson:
-#    property-naming-strategy: SNAKE_CASE
+  #  jackson:
+  #    property-naming-strategy: SNAKE_CASE
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
