@@ -12,13 +12,14 @@ import org.springframework.security.web.authentication.LoginUrlAuthenticationEnt
 @EnableWebSecurity // Spring Security 설정 활성화
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOAuth2UserService2 customOAuth2UserService;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()// URL별 권한 권리
-                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/lib/**").permitAll()
-                .antMatchers("/api/v1/**").hasRole(Role.USER.name()) // /api/v1/** 은 USER권한만 접근 가능
+                .anyRequest().permitAll()
+//                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/lib/**").permitAll()
+//                .antMatchers("/api/v1/**").hasRole(Role.USER.name()) // /api/v1/** 은 USER권한만 접근 가능
 //                .anyRequest().authenticated()
             .and()
                 .oauth2Login()
