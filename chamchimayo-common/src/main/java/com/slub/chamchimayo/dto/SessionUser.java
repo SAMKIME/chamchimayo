@@ -1,19 +1,31 @@
 package com.slub.chamchimayo.dto;
 
 import com.slub.chamchimayo.entity.User;
+import com.slub.chamchimayo.entity.enums.ProviderType;
+import com.slub.chamchimayo.entity.enums.Role;
 import java.io.Serializable;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 직렬화 기능을 가진 User 클래스
  */
 @Getter
+@ToString
 public class SessionUser implements Serializable {
     private String name;
     private String email;
+    private String gender;
+    private String mobile;
+    private Role role;
+    private ProviderType providerType;
 
     public SessionUser(User user) {
         this.name = user.getName();
         this.email = user.getEmail();
+        this.gender = user.getGender();
+        this.mobile = user.getMobile();
+        this.role = user.getRole();
+        this.providerType = user.getProviderType();
     }
 }

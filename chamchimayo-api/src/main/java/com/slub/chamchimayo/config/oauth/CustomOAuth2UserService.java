@@ -2,8 +2,10 @@ package com.slub.chamchimayo.config.oauth;
 
 import com.slub.chamchimayo.dto.SessionUser;
 import com.slub.chamchimayo.entity.User;
+import com.slub.chamchimayo.entity.enums.ProviderType;
 import com.slub.chamchimayo.repository.UserRepository;
 import java.util.Collections;
+import java.util.Locale;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // OAuth2 서비스 id (네이버, 카카오)
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        log.info("registrationId {}", registrationId);
+        ProviderType providerType = ProviderType.valueOf(registrationId.toUpperCase(Locale.ROOT));
+        log.info("registrationId {}, providerType {}", registrationId, providerType);
 
         // OAuth2 로그인 진행 시 키가 되는 필드 값 (pk)
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
@@ -40,8 +43,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.info("userNameAttributeName {}", userNameAttributeName);
 
         // OAuth2UserService
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-        User user = saveOrUpdate(attributes);
+        OAuthAttributes attributes = OAuthAttributes.of(providerType, userNameAttributeName, oAuth2User.getAttributes());
+        User user = saveOrUpdate(attributes, providerType);
         httpSession.setAttribute("user", new SessionUser(user)); //SessionUser(직렬화된 dto 클래스 사용)
 
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
@@ -50,11 +53,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     // 유저 생성 및 수정 서비스 로직
-    private User saveOrUpdate(OAuthAttributes attributes){
-        User user = userRepository.findByEmail(attributes.getEmail())
-            .map(entity -> entity.update(attributes.getName()))
+    private User saveOrUpdate(OAuthAttributes attributes, ProviderType providerType){
+        User user = userRepository.findByEmailAndProviderType(attributes.getEmail(), providerType)
+            .map(entity -> entity.update(attributes.getName(), attributes.getGender(), attributes.getMobile()))
             .orElse(attributes.toEntity());
-
         return userRepository.save(user);
     }
 }
