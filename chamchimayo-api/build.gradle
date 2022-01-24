@@ -1,6 +1,6 @@
-dependencies {
-    apply plugin: "com.google.cloud.tools.jib"
+jar { enabled = false }
 
+dependencies {
     implementation project(':chamchimayo-common')
     implementation('org.springframework.boot:spring-boot-starter-web')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
@@ -31,15 +31,5 @@ dependencies {
 
     build {
         dependsOn copyDocument
-    }
-
-    jib {
-        to {
-            image = "chamchimayo-api.kr.ncr.ntruss.com/chamchimayo-api:latest"
-            auth {
-                username = "Akjg8MwJAnMlqtS1xay2"
-                password = "X4n0F6MmrzRimRdWJBKbM3iXtFVXwuy2Jva7NmMU"
-            }
-        }
     }
 }
