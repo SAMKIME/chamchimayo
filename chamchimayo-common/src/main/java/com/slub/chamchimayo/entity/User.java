@@ -1,13 +1,11 @@
 package com.slub.chamchimayo.entity;
 
-import com.slub.chamchimayo.entity.enums.ProviderType;
 import com.slub.chamchimayo.entity.enums.Role;
 import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
 import lombok.*;
 
 import javax.persistence.*;
 
-@ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
@@ -40,12 +38,8 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "provider_type", nullable = false)
-    private ProviderType providerType;
-
     @Builder
-    public User(String name, String gender, String email, String mobile, String area, Role role, ProviderType providerType) {
+    public User(String name, String gender, String email, String mobile, String area, Role role) {
         validateName(name);
         this.name = name;
         this.gender = gender;
@@ -53,7 +47,6 @@ public class User {
         this.mobile = mobile;
         this.area = area;
         this.role = role;
-        this.providerType = providerType;
     }
 
     private void validateName(String name) {
@@ -78,10 +71,9 @@ public class User {
         this.area = area;
     }
 
-    public User update(String name, String gender, String mobile){
+    public User update(String name){
         this.name = name;
-        this.gender = gender;
-        this.mobile = mobile;
+
         return this;
     }
 

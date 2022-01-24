@@ -5,36 +5,39 @@ import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class LoginController {
+public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/loginSuccess")
-    public ModelAndView index(ModelAndView md) {
+    public String index(Model model) {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         if (user != null) {
-            md.addObject("userName", user.getName());
-            md.addObject("userEmail", user.getEmail());
+            model.addAttribute("userName", user.getName());
+            model.addAttribute("userEmail", user.getEmail());
         }
 
         log.info("[로그인 성공]");
-        log.info("user : " + user.toString());
+        log.info("userName : " + user.getName());
+        log.info("userEmail : " + user.getEmail());
 
-        md.setViewName("loginSuccess");
-        return md;
+        return "loginSuccess";
     }
 
     @GetMapping("/loginFailure")
     public ModelAndView loginFailure(ModelAndView md) {
 
         log.info("로그인 실패");
+
         md.setViewName("loginFailure");
+
         return md;
     }
 }

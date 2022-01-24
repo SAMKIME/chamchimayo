@@ -15,9 +15,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        // static 디렉토리의 하위 파일 목록은 인증 무시(항상 통과)
+        web.ignoring().antMatchers( "/resources/**", "/css/**", "/images/**", "/js/**", "/lib/**", "/profile");
+    }
+
+    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()// URL별 권한 권리
-                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/lib/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/api/v1/**").hasRole(Role.USER.name()) // /api/v1/** 은 USER권한만 접근 가능
 //                .anyRequest().authenticated()
             .and()
