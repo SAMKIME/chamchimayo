@@ -1,8 +1,8 @@
 package com.slub.chamchimayo.dto;
 
 import com.slub.chamchimayo.entity.User;
-import com.slub.chamchimayo.entity.enums.ProviderType;
-import com.slub.chamchimayo.entity.enums.Role;
+import com.slub.chamchimayo.oauth.entity.ProviderType;
+import com.slub.chamchimayo.oauth.entity.Role;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.ToString;

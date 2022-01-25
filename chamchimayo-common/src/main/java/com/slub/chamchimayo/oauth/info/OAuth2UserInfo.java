@@ -1,6 +1,8 @@
-package com.slub.chamchimayo.entity.oauth.info;
+package com.slub.chamchimayo.oauth.info;
 
 import java.util.Map;
+
+import com.slub.chamchimayo.entity.User;
 import lombok.Getter;
 
 @Getter
@@ -11,9 +13,13 @@ public abstract class OAuth2UserInfo {
         this.attributes = attributes;
     }
 
+    public abstract String getSnsId();
+
     public abstract String getName();
 
     public abstract String getEmail();
 
     public abstract String getGender();
+
+    public abstract User toEntity();
 }

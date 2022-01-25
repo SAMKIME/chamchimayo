@@ -24,7 +24,7 @@ public class LoginController {
         }
 
         log.info("[로그인 성공]");
-        log.info("user : " + user.toString());
+        log.info("User Session : {}",user);
 
         md.setViewName("loginSuccess");
         return md;

@@ -1,4 +1,4 @@
-package com.slub.chamchimayo.entity.enums;
+package com.slub.chamchimayo.oauth.entity;
 
 import lombok.Getter;
 

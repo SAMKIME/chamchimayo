@@ -1,9 +1,10 @@
-package com.slub.chamchimayo.entity.oauth.info;
+package com.slub.chamchimayo.oauth.info;
 
-import com.slub.chamchimayo.entity.enums.ProviderType;
-import com.slub.chamchimayo.entity.oauth.info.impl.GoogleOAuth2UserInfo;
-import com.slub.chamchimayo.entity.oauth.info.impl.KakaoOAuth2UserInfo;
-import com.slub.chamchimayo.entity.oauth.info.impl.NaverOAuth2UserInfo;
+import com.slub.chamchimayo.oauth.entity.ProviderType;
+import com.slub.chamchimayo.oauth.info.impl.KakaoOAuth2UserInfo;
+import com.slub.chamchimayo.oauth.info.impl.NaverOAuth2UserInfo;
+import com.slub.chamchimayo.oauth.info.impl.GoogleOAuth2UserInfo;
+
 import java.util.Map;
 
 public class OAuth2UserInfoFactory {

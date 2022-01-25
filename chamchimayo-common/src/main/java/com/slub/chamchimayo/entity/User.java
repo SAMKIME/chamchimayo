@@ -1,7 +1,7 @@
 package com.slub.chamchimayo.entity;
 
-import com.slub.chamchimayo.entity.enums.ProviderType;
-import com.slub.chamchimayo.entity.enums.Role;
+import com.slub.chamchimayo.oauth.entity.ProviderType;
+import com.slub.chamchimayo.oauth.entity.Role;
 import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
 import lombok.*;
 
@@ -44,8 +44,12 @@ public class User {
     @Column(name = "provider_type", nullable = false)
     private ProviderType providerType;
 
+    @Column(name = "sns_id", nullable = false)
+    String snsId;
+
     @Builder
-    public User(String name, String gender, String email, String mobile, String area, Role role, ProviderType providerType) {
+    public User(String name, String gender, String email, String mobile,
+                String area, Role role, ProviderType providerType, String snsId) {
         validateName(name);
         this.name = name;
         this.gender = gender;
@@ -54,6 +58,7 @@ public class User {
         this.area = area;
         this.role = role;
         this.providerType = providerType;
+        this.snsId = snsId;
     }
 
     private void validateName(String name) {
@@ -78,10 +83,9 @@ public class User {
         this.area = area;
     }
 
-    public User update(String name, String gender, String mobile){
+    public User updateUser(String name, String gender) {
         this.name = name;
         this.gender = gender;
-        this.mobile = mobile;
         return this;
     }
 
