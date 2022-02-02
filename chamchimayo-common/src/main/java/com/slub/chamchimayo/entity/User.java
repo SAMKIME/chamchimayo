@@ -1,8 +1,9 @@
 package com.slub.chamchimayo.entity;
 
 import com.slub.chamchimayo.oauth.entity.ProviderType;
-import com.slub.chamchimayo.oauth.entity.Role;
+import com.slub.chamchimayo.oauth.entity.RoleType;
 import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
+import javax.validation.constraints.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,7 +11,6 @@ import javax.persistence.*;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
 @Entity
 public class User {
 
@@ -18,13 +18,22 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
     private Long id;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column(name = "user_id")
+    private String userId;
+
+    @NotNull
+    @Column
+    private String password;
+
+    @NotNull
+    @Column
     private String name;
 
-    @Column(nullable = false)
+    @NotNull
+    @Column(unique = true)
     private String email;
 
     @Column
@@ -36,27 +45,41 @@ public class User {
     @Column
     private String area;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @Column(name = "role_type")
+    private RoleType roleType;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "provider_type", nullable = false)
+    @Column(name = "provider_type")
     private ProviderType providerType;
 
-    @Column(name = "sns_id", nullable = false)
+    @NotNull
+    @Column(name = "sns_id")
     String snsId;
 
     @Builder
-    public User(String name, String gender, String email, String mobile,
-                String area, Role role, ProviderType providerType, String snsId) {
+    public User(
+        String userId,
+        String name,
+        String email,
+        String gender,
+        String mobile,
+        String area,
+        RoleType roleType,
+        ProviderType providerType,
+        String snsId) {
+
         validateName(name);
+        this.userId = userId;
+        this.password = "NO_PASSWORD";
         this.name = name;
-        this.gender = gender;
         this.email = email;
+        this.gender = gender;
         this.mobile = mobile;
         this.area = area;
-        this.role = role;
+        this.roleType = roleType;
         this.providerType = providerType;
         this.snsId = snsId;
     }
@@ -90,6 +113,6 @@ public class User {
     }
 
     public String getRoleKey(){
-        return this.role.getKey();
+        return this.roleType.getCode();
     }
 }

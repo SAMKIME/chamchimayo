@@ -2,7 +2,7 @@ package com.slub.chamchimayo.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class HeadUtil {
+public class HeaderUtil {
 
     private final static String HEADER_AUTHORIZATION = "Authorization";
     private final static String TOKEN_PREFIX = "Bearer";

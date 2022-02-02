@@ -1,12 +1,14 @@
 package com.slub.chamchimayo.oauth.token;
 
+import com.slub.chamchimayo.oauth.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import java.security.Key;
 import java.util.Arrays;
@@ -36,24 +38,24 @@ public class AuthTokenProvider {
         return new AuthToken(token, key);
     }
 
-//    public Authentication getAuthentication(AuthToken authToken) {
-//
-//        if (authToken.validate()) {
-//
-//            Claims claims = authToken.getTokenClaims();
-//            Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
-//                        .map(SimpleGrantedAuthority::new)
-//                        .collect(Collectors.toList());
-//
-//            log.debug("claims subject = [{}]", claims.getSubject());
-//
-//            //
-//
-//            return new UsernamePasswordAuthenticationToken()
-//
-//        } else {
-//            throw new TokenValidFailedException();
-//        }
-//    }
+    public Authentication getAuthentication(AuthToken authToken) {
+
+        if (authToken.validate()) {
+
+            Claims claims = authToken.getTokenClaims();
+            Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+
+            log.debug("claims subject = [{}]", claims.getSubject());
+
+            User principal = new User(claims.getSubject(), "", authorities);
+
+            return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
+
+        } else {
+            throw new TokenValidFailedException();
+        }
+    }
 }

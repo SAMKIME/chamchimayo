@@ -2,7 +2,7 @@ package com.slub.chamchimayo.dto;
 
 import com.slub.chamchimayo.entity.User;
 import com.slub.chamchimayo.oauth.entity.ProviderType;
-import com.slub.chamchimayo.oauth.entity.Role;
+import com.slub.chamchimayo.oauth.entity.RoleType;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.ToString;
@@ -17,7 +17,7 @@ public class SessionUser implements Serializable {
     private String email;
     private String gender;
     private String mobile;
-    private Role role;
+    private RoleType role;
     private ProviderType providerType;
 
     public SessionUser(User user) {
@@ -25,7 +25,7 @@ public class SessionUser implements Serializable {
         this.email = user.getEmail();
         this.gender = user.getGender();
         this.mobile = user.getMobile();
-        this.role = user.getRole();
+        this.role = user.getRoleType();
         this.providerType = user.getProviderType();
     }
 }
