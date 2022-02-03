@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 
 @Getter
@@ -25,6 +26,7 @@ public class UserRefreshToken {
     @Column(name = "userId", unique = true)
     private String userId;
 
+    @Setter
     @NotNull
     @Column(name = "refresh_token")
     private String refreshToken;
