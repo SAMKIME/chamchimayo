@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.slub.chamchimayo.dto.SessionUser;
 import com.slub.chamchimayo.entity.User;
 import com.slub.chamchimayo.oauth.entity.ProviderType;
+import com.slub.chamchimayo.oauth.entity.RoleType;
+import com.slub.chamchimayo.oauth.entity.UserPrincipal;
+import com.slub.chamchimayo.oauth.exception.OAuthProviderMissMatchException;
 import com.slub.chamchimayo.oauth.info.OAuth2UserInfo;
 import com.slub.chamchimayo.oauth.info.OAuth2UserInfoFactory;
 import com.slub.chamchimayo.repository.UserRepository;
@@ -55,23 +58,60 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // OAuth2UserService
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());
-        User user = saveOrUpdate(userInfo, providerType);
-        httpSession.setAttribute("user", new SessionUser(user)); //SessionUser(직렬화된 dto 클래스 사용)
+//        User user = saveOrUpdate(userInfo, providerType);
+//        httpSession.setAttribute("user", new SessionUser(user)); //SessionUser(직렬화된 dto 클래스 사용)
+//
+//        log.info("User Login Info : {}", user);
+//
+//        return new DefaultOAuth2User(
+//            Collections.singleton(
+//                new SimpleGrantedAuthority(user.getRoleKey())),
+//                userInfo.getAttributes(),
+//                userNameAttributeName);
 
-        log.info("User Login Info : {}", user);
+//        User savedUser = userRepository.findByUserId(userInfo.getId());
+        User savedUser = userRepository.findByEmailAndProviderType(userInfo.getEmail(), providerType);
 
-        return new DefaultOAuth2User(
-            Collections.singleton(
-                new SimpleGrantedAuthority(user.getRoleKey())),
-                userInfo.getAttributes(),
-                userNameAttributeName);
+        if (savedUser != null) {
+            if (providerType != savedUser.getProviderType()) {
+                throw new OAuthProviderMissMatchException(
+                    "Looks like you're signed up with " + providerType +
+                        " account. Please use your " + savedUser.getProviderType() + " account to login."
+                );
+            }
+            updateUser(savedUser, userInfo);
+        } else {
+            savedUser = createUser(userInfo, providerType);
+        }
+
+        return UserPrincipal.create(savedUser, oAuth2User.getAttributes());
     }
 
     // 유저 생성 및 수정 서비스 로직
-    private User saveOrUpdate(OAuth2UserInfo userInfo, ProviderType providerType){
-        User user = userRepository.findByEmailAndProviderType(userInfo.getEmail(), providerType)
-            .map(entity -> entity.updateUser(userInfo.getName(), userInfo.getGender()))
-            .orElse(userInfo.toEntity());
+//    private User saveOrUpdate(OAuth2UserInfo userInfo, ProviderType providerType){
+//        User user = userRepository.findByUserId(userInfo.getEmail(), providerType)
+//            .map(entity -> entity.updateUser(userInfo.getName(), userInfo.getGender()))
+//            .orElse(userInfo.toEntity());
+//        return userRepository.save(user);
+//    }
+
+    private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
+        User user = User.builder()
+            .userId(userInfo.getId())
+            .name(userInfo.getName())
+            .email(userInfo.getEmail())
+            .providerType(providerType)
+            .gender(userInfo.getGender())
+            .roleType(RoleType.USER)
+            .build();
+
         return userRepository.save(user);
+    }
+
+    private User updateUser(User user, OAuth2UserInfo userInfo) {
+        if (userInfo.getName() != null && !user.getName().equals(userInfo.getName())) {
+            user.changeName(userInfo.getName());
+        }
+        return user;
     }
 }

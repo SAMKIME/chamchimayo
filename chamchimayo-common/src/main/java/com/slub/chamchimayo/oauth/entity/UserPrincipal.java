@@ -4,10 +4,7 @@ import com.slub.chamchimayo.entity.User;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,25 +27,14 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
     @Setter
     private Map<String, Object> attributes;
 
-    @Builder
-    public UserPrincipal(String userId, String password,
-        ProviderType providerType, RoleType roleType,
-        Collection<GrantedAuthority> authorities) {
-        this.userId = userId;
-        this.password = password;
-        this.providerType = providerType;
-        this.roleType = roleType;
-        this.authorities = authorities;
-    }
-
     public static UserPrincipal create(User user) {
-        return UserPrincipal.builder()
-            .userId(user.getUserId())
-            .password(user.getPassword())
-            .providerType(user.getProviderType())
-            .roleType(RoleType.USER)
-            .authorities(Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode())))
-            .build();
+        return new UserPrincipal(
+            user.getUserId(),
+            user.getPassword(),
+            user.getProviderType(),
+            RoleType.USER,
+            Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode()))
+        );
     }
 
     public static UserPrincipal create(User user, Map<String, Object> attributes) {

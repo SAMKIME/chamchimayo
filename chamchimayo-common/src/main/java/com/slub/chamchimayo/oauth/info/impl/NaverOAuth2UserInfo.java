@@ -50,7 +50,6 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
             .mobile(getMobile())
             .providerType(ProviderType.NAVER)
             .roleType(RoleType.USER) //기본 권한 USER
-            .snsId(getId())
             .build();
     }
 }

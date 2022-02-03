@@ -41,7 +41,6 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
             .gender(getGender())
             .providerType(ProviderType.GOOGLE)
             .roleType(RoleType.USER) //기본 권한 USER
-            .snsId(getId())
             .build();
     }
 }

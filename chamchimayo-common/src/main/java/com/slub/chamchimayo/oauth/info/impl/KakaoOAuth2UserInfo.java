@@ -53,7 +53,6 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
             .gender(getGender())
             .providerType(ProviderType.KAKAO)
             .roleType(RoleType.USER) //기본 권한 USER
-            .snsId(getId())
             .build();
     }
 }

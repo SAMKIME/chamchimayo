@@ -68,4 +68,8 @@ public class UserService {
                 .build();
     }
 
+    public User getUser(String userId) {
+        return userRepository.findByUserId(userId);
+    }
+
 }

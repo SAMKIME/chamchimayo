@@ -33,7 +33,7 @@ public class User {
     private String name;
 
     @NotNull
-    @Column(unique = true)
+    @Column
     private String email;
 
     @Column
@@ -55,10 +55,6 @@ public class User {
     @Column(name = "provider_type")
     private ProviderType providerType;
 
-    @NotNull
-    @Column(name = "sns_id")
-    String snsId;
-
     @Builder
     public User(
         String userId,
@@ -68,8 +64,7 @@ public class User {
         String mobile,
         String area,
         RoleType roleType,
-        ProviderType providerType,
-        String snsId) {
+        ProviderType providerType) {
 
         validateName(name);
         this.userId = userId;
@@ -81,7 +76,6 @@ public class User {
         this.area = area;
         this.roleType = roleType;
         this.providerType = providerType;
-        this.snsId = snsId;
     }
 
     private void validateName(String name) {
