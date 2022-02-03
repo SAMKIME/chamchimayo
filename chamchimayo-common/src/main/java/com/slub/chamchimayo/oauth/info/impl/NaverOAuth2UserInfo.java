@@ -18,7 +18,7 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getSnsId() {
+    public String getId() {
         return (String)response.get("id");
     }
 
@@ -50,7 +50,7 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
             .mobile(getMobile())
             .providerType(ProviderType.NAVER)
             .roleType(RoleType.USER) //기본 권한 USER
-            .snsId(getSnsId())
+            .snsId(getId())
             .build();
     }
 }

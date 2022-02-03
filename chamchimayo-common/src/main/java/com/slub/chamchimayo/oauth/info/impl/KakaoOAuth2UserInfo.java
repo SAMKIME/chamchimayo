@@ -19,7 +19,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
-    public String getSnsId() {
+    public String getId() {
         return attributes.get("id").toString();
     }
 
@@ -53,7 +53,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
             .gender(getGender())
             .providerType(ProviderType.KAKAO)
             .roleType(RoleType.USER) //기본 권한 USER
-            .snsId(getSnsId())
+            .snsId(getId())
             .build();
     }
 }

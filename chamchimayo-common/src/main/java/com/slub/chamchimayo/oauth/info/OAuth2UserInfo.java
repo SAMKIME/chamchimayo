@@ -13,7 +13,7 @@ public abstract class OAuth2UserInfo {
         this.attributes = attributes;
     }
 
-    public abstract String getSnsId();
+    public abstract String getId();
 
     public abstract String getName();
 
