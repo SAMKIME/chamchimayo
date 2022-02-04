@@ -12,6 +12,7 @@ import com.slub.chamchimayo.oauth.token.AuthTokenProvider;
 import com.slub.chamchimayo.repository.UserRefreshTokenRepository;
 import com.slub.chamchimayo.utils.CookieUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -36,6 +37,7 @@ import static com.slub.chamchimayo.oauth.repository.OAuth2AuthorizationRequestBa
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthTokenProvider tokenProvider;
@@ -65,6 +67,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        log.info("targetUrl : " + targetUrl);
 
         OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
         ProviderType providerType = ProviderType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
@@ -112,7 +115,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
         super.clearAuthenticationAttributes(request);
-        authorizationRequestRepository.removeAuthorizationReqeustCookie(request, response);
+        authorizationRequestRepository.removeAuthorizationRequestCookie(request, response);
     }
 
     private boolean hasAuthority(Collection<? extends GrantedAuthority> authorities, String authority) {
