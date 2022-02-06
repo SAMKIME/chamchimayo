@@ -65,8 +65,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().permitAll()
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-//                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode())
-//                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
+//                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode()) // api/** 은 USER권한만 접근 가능
+//                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode()) ///api/**/admin/**은 admin만 접근 가능
 //                .anyRequest().authenticated()
             .and()
                 .oauth2Login()
@@ -77,8 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .redirectionEndpoint()
                 .baseUri("/*/oauth2/code/*")
             .and()
-                .userInfoEndpoint()
-                .userService(oAuth2UserService)
+                .userInfoEndpoint() // oauth2 로그인 성공후 가져올 때의 설정들
+                .userService(oAuth2UserService) // 소셜 로그인 성공 시 후속 조치를 진행할 UserService 인터페스 구현체 등록
+                                                // 리소스 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
             .and()
                 .successHandler(oAuth2AuthenticationSuccessHandler())
                 .failureHandler(oAuth2AuthenticationFailureHandler());

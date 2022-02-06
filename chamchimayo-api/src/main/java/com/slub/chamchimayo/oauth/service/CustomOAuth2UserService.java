@@ -58,19 +58,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // OAuth2UserService
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());
-//        User user = saveOrUpdate(userInfo, providerType);
-//        httpSession.setAttribute("user", new SessionUser(user)); //SessionUser(직렬화된 dto 클래스 사용)
-//
-//        log.info("User Login Info : {}", user);
-//
-//        return new DefaultOAuth2User(
-//            Collections.singleton(
-//                new SimpleGrantedAuthority(user.getRoleKey())),
-//                userInfo.getAttributes(),
-//                userNameAttributeName);
 
-//        User savedUser = userRepository.findByUserId(userInfo.getId());
         User savedUser = userRepository.findByEmailAndProviderType(userInfo.getEmail(), providerType);
+        httpSession.setAttribute("user", new SessionUser(savedUser)); //SessionUser(직렬화된 dto 클래스 사용)
+
+        log.info("User Login Info : {}", savedUser);
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {
