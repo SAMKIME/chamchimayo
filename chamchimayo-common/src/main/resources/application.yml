@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    include: aws
   jpa:
     properties:
       hibernate:
@@ -13,6 +15,16 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jackson:
     property-naming-strategy: SNAKE_CASE
+
+cloud:
+  aws:
+    s3:
+      bucket: image-upload-test-2
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 logging:
   level:
     root: info

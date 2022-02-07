@@ -1,0 +1,30 @@
+package com.slub.chamchimayo.controller;
+
+import com.slub.chamchimayo.service.S3Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
+@Controller
+@RequiredArgsConstructor
+public class S3Controller {
+
+    private final S3Service s3Service;
+
+    @GetMapping("/")
+    public String index() {
+        return "index";
+    }
+
+    @PostMapping("/upload")
+    @ResponseBody
+    public String upload(@RequestParam("data")MultipartFile multipartFile) throws IOException {
+        return s3Service.upload(multipartFile);
+    }
+}
