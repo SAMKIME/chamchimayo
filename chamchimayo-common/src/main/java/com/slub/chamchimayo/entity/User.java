@@ -15,7 +15,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
+    @Column(name = "user_id")
     private Long id;
 
     @Column
@@ -66,5 +66,13 @@ public class User {
 
     public void changeArea(String area) {
         this.area = area;
+    }
+
+    public void uploadProfile(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public void deleteProfile() {
+        this.profileImage = null;
     }
 }

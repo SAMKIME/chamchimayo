@@ -1,14 +1,11 @@
 package com.slub.chamchimayo.controller;
 
-import com.slub.chamchimayo.dto.UserUpdateRequest;
-import com.slub.chamchimayo.dto.UserResponse;
-import com.slub.chamchimayo.entity.User;
+import com.slub.chamchimayo.dto.request.UserUpdateRequest;
+import com.slub.chamchimayo.dto.response.UserResponse;
 import com.slub.chamchimayo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

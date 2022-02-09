@@ -1,4 +1,4 @@
-package com.slub.chamchimayo.dto;
+package com.slub.chamchimayo.dto.response;
 
 import com.slub.chamchimayo.entity.User;
 import lombok.AllArgsConstructor;

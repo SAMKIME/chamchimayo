@@ -1,8 +1,8 @@
 package com.slub.chamchimayo.service;
 
 
-import com.slub.chamchimayo.dto.UserUpdateRequest;
-import com.slub.chamchimayo.dto.UserResponse;
+import com.slub.chamchimayo.dto.request.UserUpdateRequest;
+import com.slub.chamchimayo.dto.response.UserResponse;
 import com.slub.chamchimayo.entity.User;
 import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
 import com.slub.chamchimayo.repository.UserRepository;
@@ -25,7 +25,7 @@ public class UserService {
         findMembers.ifPresent(m -> {
             throw ExceptionWithCodeAndMessage.DUPLICATE_USER.getException();
         });
-        User savedUser = userRepository.save(getMemberEntity(userUpdateRequest));
+        User savedUser = userRepository.save(userUpdateRequest.toEntity());
         return UserResponse.of(savedUser);
     }
 
@@ -57,15 +57,4 @@ public class UserService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
-
-    private User getMemberEntity(UserUpdateRequest userUpdateRequest) {
-        return User.builder()
-                .name(userUpdateRequest.getName())
-                .gender(userUpdateRequest.getGender())
-                .email(userUpdateRequest.getEmail())
-                .mobile(userUpdateRequest.getMobile())
-                .area(userUpdateRequest.getArea())
-                .build();
-    }
-
 }
