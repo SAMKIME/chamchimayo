@@ -17,7 +17,10 @@ public enum ExceptionWithCodeAndMessage {
     // 로그인 관련 : 7XX
 
     // 제약 관련 : 8XX
-    INVALID_INPUT_LENGTH(new BadRequestException(800, "입력값의 길이가 적절하지 않습니다."));
+    INVALID_INPUT_LENGTH(new BadRequestException(800, "입력값의 길이가 적절하지 않습니다.")),
+
+    // 파일 관련 : 9xx
+    IO_EXCEPTION(new BadRequestException(900, "업로드할 파일이 잘못되었습니다."));
 
     private final CustomException exception;
 

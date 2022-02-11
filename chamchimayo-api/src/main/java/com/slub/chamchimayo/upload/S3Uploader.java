@@ -1,8 +1,9 @@
-package com.slub.chamchimayo.service;
+package com.slub.chamchimayo.upload;
 
+import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -15,9 +16,9 @@ import java.io.IOException;
 import java.util.Date;
 
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class S3Service {
+public class S3Uploader {
 
     private final S3Client amazonS3;
 
@@ -27,7 +28,6 @@ public class S3Service {
     public String upload(MultipartFile multipartFile) throws IOException {
         File uploadFile = convert(multipartFile);
         String uploadFileUrl = uploadToS3(uploadFile);
-        System.out.println("uploadFileUrl = " + uploadFileUrl);
         return uploadFileUrl;
     }
 
@@ -36,7 +36,7 @@ public class S3Service {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
         } catch (IOException e) {
-            throw e;
+            throw ExceptionWithCodeAndMessage.IO_EXCEPTION.getException();
         }
         return file;
     }
@@ -55,11 +55,12 @@ public class S3Service {
         } finally {
             removeNewFile(uploadFile);
         }
-        String uploadFileUrl = fileName;
-        return uploadFileUrl;
+        return fileName;
     }
 
     private void removeNewFile(File uploadFile) {
         uploadFile.delete();
     }
+
+
 }

@@ -1,6 +1,6 @@
 package com.slub.chamchimayo.controller;
 
-import com.slub.chamchimayo.service.S3Service;
+import com.slub.chamchimayo.upload.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +13,9 @@ import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
-public class S3Controller {
+public class S3Conxtroller {
 
-    private final S3Service s3Service;
+    private final S3Uploader s3Uploader;
 
     @GetMapping("/")
     public String index() {
@@ -25,6 +25,6 @@ public class S3Controller {
     @PostMapping("/upload")
     @ResponseBody
     public String upload(@RequestParam("data")MultipartFile multipartFile) throws IOException {
-        return s3Service.upload(multipartFile);
+        return s3Uploader.upload(multipartFile);
     }
 }
