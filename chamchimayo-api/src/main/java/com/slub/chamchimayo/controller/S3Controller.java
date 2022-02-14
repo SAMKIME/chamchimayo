@@ -13,7 +13,7 @@ import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
-public class S3Conxtroller {
+public class S3Controller {
 
     private final S3Uploader s3Uploader;
 

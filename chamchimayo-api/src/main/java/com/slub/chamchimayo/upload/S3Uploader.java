@@ -8,11 +8,15 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetUrlRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 
 
@@ -46,6 +50,7 @@ public class S3Uploader {
         String fileName = new Date().getTime() + uploadFile.getName();
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
+                .acl(ObjectCannedACL.PUBLIC_READ)
                 .key(fileName)
                 .build();
         try {
@@ -55,12 +60,32 @@ public class S3Uploader {
         } finally {
             removeNewFile(uploadFile);
         }
-        return fileName;
+        String url = getURL(amazonS3, bucket, fileName);
+        return url;
     }
 
     private void removeNewFile(File uploadFile) {
         uploadFile.delete();
     }
+
+    public String getURL(S3Client s3, String bucketName, String keyName) {
+        URL url = null;
+        try {
+            GetUrlRequest request = GetUrlRequest.builder()
+                    .bucket(bucketName)
+                    .key(keyName)
+                    .build();
+
+            url = s3.utilities().getUrl(request);
+            System.out.println("The URL for " + keyName + " is " + url.toString());
+        } catch (S3Exception e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+            System.exit(1);
+        } finally {
+            return url.toString();
+        }
+    }
+
 
 
 }
