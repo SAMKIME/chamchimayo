@@ -1,8 +1,5 @@
 package com.slub.chamchimayo.oauth.info.impl;
 
-import com.slub.chamchimayo.entity.User;
-import com.slub.chamchimayo.oauth.entity.ProviderType;
-import com.slub.chamchimayo.oauth.entity.RoleType;
 import com.slub.chamchimayo.oauth.info.OAuth2UserInfo;
 
 import java.util.Map;
@@ -43,16 +40,5 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
             gender = "F";
         }
         return gender;
-    }
-
-    @Override
-    public User toEntity() {
-        return User.builder()
-            .name(getName())
-            .email(getEmail())
-            .gender(getGender())
-            .providerType(ProviderType.KAKAO)
-            .roleType(RoleType.USER) //기본 권한 USER
-            .build();
     }
 }

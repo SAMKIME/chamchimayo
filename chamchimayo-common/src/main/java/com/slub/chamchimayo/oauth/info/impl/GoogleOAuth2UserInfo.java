@@ -1,8 +1,5 @@
 package com.slub.chamchimayo.oauth.info.impl;
 
-import com.slub.chamchimayo.entity.User;
-import com.slub.chamchimayo.oauth.entity.ProviderType;
-import com.slub.chamchimayo.oauth.entity.RoleType;
 import com.slub.chamchimayo.oauth.info.OAuth2UserInfo;
 
 import java.util.Map;
@@ -31,16 +28,5 @@ public class GoogleOAuth2UserInfo extends OAuth2UserInfo {
     @Override
     public String getGender() {
         return (String) attributes.get("gender");
-    }
-
-    @Override
-    public User toEntity() {
-        return User.builder()
-            .name(getName())
-            .email(getEmail())
-            .gender(getGender())
-            .providerType(ProviderType.GOOGLE)
-            .roleType(RoleType.USER) //기본 권한 USER
-            .build();
     }
 }

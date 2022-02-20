@@ -1,8 +1,5 @@
 package com.slub.chamchimayo.oauth.info.impl;
 
-import com.slub.chamchimayo.entity.User;
-import com.slub.chamchimayo.oauth.entity.ProviderType;
-import com.slub.chamchimayo.oauth.entity.RoleType;
 import com.slub.chamchimayo.oauth.info.OAuth2UserInfo;
 
 import java.util.Map;
@@ -39,17 +36,5 @@ public class NaverOAuth2UserInfo extends OAuth2UserInfo {
 
     public String getMobile() {
         return (String)response.get("mobile");
-    }
-
-    @Override
-    public User toEntity() {
-        return User.builder()
-            .name(getName())
-            .email(getEmail())
-            .gender(getGender())
-            .mobile(getMobile())
-            .providerType(ProviderType.NAVER)
-            .roleType(RoleType.USER) //기본 권한 USER
-            .build();
     }
 }
