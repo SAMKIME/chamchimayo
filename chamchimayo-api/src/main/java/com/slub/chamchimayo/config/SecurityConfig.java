@@ -39,35 +39,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenAccessDeniedHandler tokenAccessDeniedHandler;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
-    /*
-     * UserDetailsService 설정
-     * */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder());
-    }
+    private static final String[] PUBLIC_URI = { "/**"};
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
             .and()
+                // stateless한 세션 정책 설정
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
+                // 개발 편의성을 위해 CSRF 프로텍션 비활성화
                 .csrf().disable()
+                // 폼 기반 인증 비활성화
                 .formLogin().disable()
+                // HTTP 기본 인증 비활성화
                 .httpBasic().disable()
+                // 인증 오류 발생 시 처리를 위한 핸들러 추가
                 .exceptionHandling()
-                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .accessDeniedHandler(tokenAccessDeniedHandler)
             .and()
+                // 리소스 별 허용 범위 설정
                 .authorizeRequests()
-                .anyRequest().permitAll()
+                .antMatchers(PUBLIC_URI).permitAll()
 //                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 //                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode()) // api/** 은 USER권한만 접근 가능
 //                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode()) ///api/**/admin/**은 admin만 접근 가능
-//                .anyRequest().authenticated()
+                .anyRequest().authenticated()
             .and()
                 .oauth2Login()
                 .authorizationEndpoint()
@@ -87,6 +86,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
+    /**
+     * UserDetailsService 설정
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
+    }
 
     /**
      * auth 매니저 설정
@@ -97,8 +104,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    /*
-    * security 설정 시, 사용할 인코더 설정
+    /**
+     * security 설정 시, 사용할 인코더 설정
      */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -110,7 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider);
+        return new TokenAuthenticationFilter(tokenProvider, userDetailsService);
     }
 
     /**

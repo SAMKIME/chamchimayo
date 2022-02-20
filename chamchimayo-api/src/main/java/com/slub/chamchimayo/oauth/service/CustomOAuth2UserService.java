@@ -3,6 +3,7 @@ package com.slub.chamchimayo.oauth.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.slub.chamchimayo.dto.SessionUser;
 import com.slub.chamchimayo.entity.User;
+import com.slub.chamchimayo.exception.httpbasiceception.NotFoundException;
 import com.slub.chamchimayo.oauth.entity.ProviderType;
 import com.slub.chamchimayo.oauth.entity.RoleType;
 import com.slub.chamchimayo.oauth.entity.UserPrincipal;
@@ -11,10 +12,12 @@ import com.slub.chamchimayo.oauth.info.OAuth2UserInfo;
 import com.slub.chamchimayo.oauth.info.OAuth2UserInfoFactory;
 import com.slub.chamchimayo.repository.UserRepository;
 
+import com.slub.chamchimayo.service.UserService;
 import java.util.Collections;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,7 +34,6 @@ import org.springframework.stereotype.Service;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
-    private final HttpSession httpSession;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -59,10 +61,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // OAuth2UserService
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());
 
-        User savedUser = userRepository.findByEmailAndProviderType(userInfo.getEmail(), providerType);
-        httpSession.setAttribute("user", new SessionUser(savedUser)); //SessionUser(직렬화된 dto 클래스 사용)
+        User savedUser = userRepository.findByUserId(userInfo.getId()).orElse(null);
 
-        log.info("User Login Info : {}", savedUser);
+        log.info("User Info Check before save: {}", savedUser);
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {
@@ -76,17 +77,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             savedUser = createUser(userInfo, providerType);
         }
 
+        log.info("Save Or Update After User Login Info Check : {}", savedUser);
+
         return UserPrincipal.create(savedUser, oAuth2User.getAttributes());
     }
 
-    // 유저 생성 및 수정 서비스 로직
-//    private User saveOrUpdate(OAuth2UserInfo userInfo, ProviderType providerType){
-//        User user = userRepository.findByUserId(userInfo.getEmail(), providerType)
-//            .map(entity -> entity.updateUser(userInfo.getName(), userInfo.getGender()))
-//            .orElse(userInfo.toEntity());
-//        return userRepository.save(user);
-//    }
-
+    /**
+     * 유저 생성 및 수정 서비스 로직
+     */
     private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         User user = User.builder()
             .userId(userInfo.getId())

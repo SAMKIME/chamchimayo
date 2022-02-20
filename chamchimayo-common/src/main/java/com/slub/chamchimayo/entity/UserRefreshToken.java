@@ -9,11 +9,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-
+@ToString
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "USER_REFRESH_TOKEN")
 public class UserRefreshToken {
 
@@ -23,7 +26,7 @@ public class UserRefreshToken {
     private Long refreshTokenSeq;
 
     @NotNull
-    @Column(name = "userId", unique = true)
+    @Column(name = "user_id", unique = true)
     private String userId;
 
     @Setter

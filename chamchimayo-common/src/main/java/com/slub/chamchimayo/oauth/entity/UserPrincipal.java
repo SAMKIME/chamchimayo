@@ -4,6 +4,7 @@ import com.slub.chamchimayo.entity.User;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
 
     private final String userId;
+    private final String email;
     private final String password;
     private final ProviderType providerType;
     private final RoleType roleType;
@@ -30,6 +32,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
     public static UserPrincipal create(User user) {
         return new UserPrincipal(
             user.getUserId(),
+            user.getEmail(),
             user.getPassword(),
             user.getProviderType(),
             RoleType.USER,

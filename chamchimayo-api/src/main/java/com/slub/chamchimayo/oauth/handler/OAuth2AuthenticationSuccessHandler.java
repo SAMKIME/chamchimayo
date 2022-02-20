@@ -50,7 +50,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = determineTargetUrl(request, response, authentication);
 
         if (response.isCommitted()) {
-            logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
+            logger.debug("응답이 이미 커밋되었습니다. {} 로 리디렉션할 수 없습니다. " + targetUrl);
             return;
         }
 
@@ -94,7 +94,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             new Date(now.getTime() + refreshTokenExpiry)
         );
 
-        // DB 저장
+        // refresh Token DB 저장
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserId(userInfo.getId());
         if (userRefreshToken != null) {
             userRefreshToken.setRefreshToken(refreshToken.getToken());
@@ -139,6 +139,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             .anyMatch(authorizedRedirectUri -> {
 
                 URI authorizedURI = URI.create(authorizedRedirectUri);
+                log.info("authorizedURI : " + authorizedURI);
                 if (authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
                     && authorizedURI.getPort() == clientRedirectUri.getPort()) {
                     return true;

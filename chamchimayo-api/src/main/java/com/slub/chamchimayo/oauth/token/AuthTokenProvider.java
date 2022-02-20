@@ -1,5 +1,6 @@
 package com.slub.chamchimayo.oauth.token;
 
+import com.slub.chamchimayo.oauth.entity.UserPrincipal;
 import com.slub.chamchimayo.oauth.exception.TokenValidFailedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
@@ -41,18 +42,35 @@ public class AuthTokenProvider {
     public Authentication getAuthentication(AuthToken authToken) {
 
         if (authToken.validate()) {
-
             Claims claims = authToken.getTokenClaims();
             Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-            log.debug("claims subject = [{}]", claims.getSubject());
+            log.debug("claims subject (UserId) = [{}]", claims.getSubject());
 
             User principal = new User(claims.getSubject(), "", authorities);
 
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
+
+        } else {
+            throw new TokenValidFailedException();
+        }
+    }
+
+    public String getUserIdFromToken(AuthToken authToken) {
+
+        if (authToken.validate()) {
+            Claims claims = authToken.getTokenClaims();
+            Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(new String[] {claims.get(AUTHORITIES_KEY).toString()})
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+            log.debug("claims subject (UserId) = [{}]", claims.getSubject());
+
+            return claims.getSubject();
 
         } else {
             throw new TokenValidFailedException();

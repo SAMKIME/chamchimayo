@@ -26,20 +26,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
+
+    private final static String REFRESH_TOKEN = "refresh_token";
+    private final static long THREE_DAYS_MSEC = 259200000;
 
     private final AppProperties appProperties;
     private final AuthTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
-    private final static long THREE_DAYS_MSEC = 259200000;
-    private final static String REFRESH_TOKEN = "refresh_token";
-
+    // id, pw로 로그인
     @PostMapping("/login")
     public ApiResponse login(HttpServletRequest request, HttpServletResponse response, @RequestBody AuthReqModel authReqModel) {
         Authentication authentication = authenticationManager.authenticate(
@@ -81,8 +83,11 @@ public class AuthController {
         return ApiResponse.success("token", accessToken.getToken());
     }
 
+    /**
+     * 토큰만료 확인 및 재발급
+     */
     @GetMapping("/refresh")
-    public ApiResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public ApiResponse refreshToken (HttpServletRequest request, HttpServletResponse response) {
         // access token 확인
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
@@ -90,7 +95,7 @@ public class AuthController {
             return ApiResponse.invalidAccessToken();
         }
 
-        // expired access token인지 확인
+        // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
             return ApiResponse.notExpiredTokenYet();
@@ -103,7 +108,6 @@ public class AuthController {
         String refreshToken = CookieUtil.getCookie(request, REFRESH_TOKEN)
             .map(Cookie::getValue)
             .orElse((null));
-
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
         if (authRefreshToken.validate()) {
