@@ -50,15 +50,16 @@ public class TeamService {
             .collect(Collectors.toList());
     }
 
-    public void updateTeamName(TeamRequest teamRequest) {
+    public TeamResponse updateTeamName(TeamRequest teamRequest) {
 
-        teamRepository.findById(teamRequest.getId())
+        return teamRepository.findById(teamRequest.getId())
             .map(team -> {
                 team.updateTeamName(teamRequest);
                 return team;
             })
             .map(team -> teamRepository.save(team))
-            .map(team -> TeamResponse.from(team));
+            .map(team -> TeamResponse.from(team))
+            .get();
     }
 
     public void delete(Long id) {
