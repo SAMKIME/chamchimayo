@@ -12,19 +12,13 @@ import com.slub.chamchimayo.oauth.info.OAuth2UserInfo;
 import com.slub.chamchimayo.oauth.info.OAuth2UserInfoFactory;
 import com.slub.chamchimayo.repository.UserRepository;
 
-import com.slub.chamchimayo.service.UserService;
-import java.util.Collections;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -83,7 +77,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     /**
-     * 유저 생성 및 수정 서비스 로직
+     * 유저 생성 및 수정 서비스 로직S
      */
     private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         User user = User.builder()

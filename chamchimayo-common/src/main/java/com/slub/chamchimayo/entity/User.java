@@ -105,8 +105,4 @@ public class User {
         this.gender = gender;
         return this;
     }
-
-    public String getRoleKey(){
-        return this.roleType.getCode();
-    }
 }

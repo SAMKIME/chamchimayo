@@ -71,9 +71,9 @@ public class UserService {
                 .build();
     }
 
-    public User getUser(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(
-            () -> new UsernameNotFoundException("User not found with UserId")
-        );
+    public UserResponse getUser(String userId) {
+        Optional<User> findByUserId = userRepository.findByUserId(userId);
+        User user = findByUserId.orElseThrow(ExceptionWithCodeAndMessage.NOT_FOUND_USER::getException);
+        return UserResponse.of(user);
     }
 }

@@ -68,7 +68,7 @@ public class AuthTokenProvider {
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
 
-            log.debug("claims subject (UserId) = [{}]", claims.getSubject());
+            log.debug("claims subject = [{}]", claims.getSubject()); // claims subject == userId
 
             return claims.getSubject();
 
