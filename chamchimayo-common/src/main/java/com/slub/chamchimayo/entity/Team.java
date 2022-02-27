@@ -22,25 +22,24 @@ public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "team_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
-    private String area;
+    private String region;
 
     @Column(nullable = false)
     private String sports;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
-    private List<MemberTeam> memberList = new ArrayList<>();
+    private List<UserTeam> userList = new ArrayList<>();
 
     @Builder
-    public Team(String name, String area, String sports) {
+    public Team(String name, String region, String sports) {
         this.name = name;
-        this.area = area;
+        this.region = region;
         this.sports = sports;
     }
 

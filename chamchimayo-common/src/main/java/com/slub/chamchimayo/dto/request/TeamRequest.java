@@ -12,14 +12,14 @@ public class TeamRequest {
 
     private String name;
 
-    private String area;
+    private String region;
 
     private String sports;
 
     public Team toEntity() {
         return Team.builder()
             .name(this.name)
-            .area(this.area)
+            .region(this.region)
             .sports(this.sports)
             .build();
     }
