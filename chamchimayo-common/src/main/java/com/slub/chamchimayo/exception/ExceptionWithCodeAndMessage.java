@@ -9,6 +9,9 @@ import lombok.Getter;
 @Getter
 public enum ExceptionWithCodeAndMessage {
     // 서버 관련 : 5XX
+    INVALID_ACCESS_TOKEN(new InvalidTokenException(500, "Invalid access token.")),
+    INVALID_REFRESH_TOKEN(new InvalidTokenException(500, "INVALID_REFRESH_TOKEN")),
+    NOT_EXPIRED_TOKEN_YET(new InvalidTokenException(500, "Not expired token yet.")),
 
     // 유저 관련 : 6XX
     NOT_FOUND_USER(new NotFoundException(600, "해당하는 유저가 없습니다.")),

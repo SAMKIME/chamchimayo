@@ -2,9 +2,10 @@ package com.slub.chamchimayo.oauth.info;
 
 import java.util.Map;
 
-import com.slub.chamchimayo.entity.User;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 public abstract class OAuth2UserInfo {
     protected Map<String, Object> attributes; // OAuth2 반환하는 유저 정보 MAP
@@ -20,4 +21,6 @@ public abstract class OAuth2UserInfo {
     public abstract String getEmail();
 
     public abstract String getGender();
+
+    public abstract String getMobile();
 }

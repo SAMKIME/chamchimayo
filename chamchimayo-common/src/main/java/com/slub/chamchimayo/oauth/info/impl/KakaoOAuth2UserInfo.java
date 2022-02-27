@@ -41,4 +41,9 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
         }
         return gender;
     }
+
+    @Override
+    public String getMobile() {
+        return (String)kakaoAccount.get("mobile");
+    }
 }

@@ -1,7 +1,8 @@
 package com.slub.chamchimayo.controller;
 
+import static com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage.*;
+
 import com.slub.chamchimayo.config.AppProperties;
-import com.slub.chamchimayo.dto.ApiResponse;
 import com.slub.chamchimayo.dto.request.AuthReqModel;
 import com.slub.chamchimayo.entity.UserRefreshToken;
 import com.slub.chamchimayo.oauth.entity.RoleType;
@@ -13,11 +14,14 @@ import com.slub.chamchimayo.utils.CookieUtil;
 import com.slub.chamchimayo.utils.HeaderUtil;
 import io.jsonwebtoken.Claims;
 import javax.servlet.http.Cookie;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +47,7 @@ public class AuthController {
 
     // id, pw로 로그인
     @PostMapping("/login")
-    public ApiResponse login(HttpServletRequest request, HttpServletResponse response, @RequestBody AuthReqModel authReqModel) {
+    public ResponseEntity login(HttpServletRequest request, HttpServletResponse response, @RequestBody AuthReqModel authReqModel) {
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 authReqModel.getId(),
@@ -80,25 +84,25 @@ public class AuthController {
         CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
         CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), cookieMaxAge);
 
-        return ApiResponse.success("token", accessToken.getToken());
+        return ResponseEntity.ok(accessToken.getToken());
     }
 
     /**
      * 토큰만료 확인 및 재발급
      */
     @GetMapping("/refresh")
-    public ApiResponse refreshToken (HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity refreshToken (HttpServletRequest request, HttpServletResponse response) {
         // access token 확인
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
         if (!authToken.validate()) {
-            return ApiResponse.invalidAccessToken();
+            return new ResponseEntity<>(INVALID_ACCESS_TOKEN.findMessage(), HttpStatus.BAD_REQUEST);
         }
 
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
-            return ApiResponse.notExpiredTokenYet();
+            return new ResponseEntity<>(NOT_EXPIRED_TOKEN_YET.findMessage(), HttpStatus.BAD_REQUEST);
         }
 
         String userId = claims.getSubject();
@@ -111,13 +115,13 @@ public class AuthController {
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
         if (authRefreshToken.validate()) {
-            return ApiResponse.invalidRefreshToken();
+            return new ResponseEntity<>(INVALID_REFRESH_TOKEN.findMessage(), HttpStatus.BAD_REQUEST);
         }
 
         // userId refresh token 으로 DB 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
         if (userRefreshToken == null) {
-            return ApiResponse.invalidRefreshToken();
+            return new ResponseEntity<>(INVALID_REFRESH_TOKEN.findMessage(), HttpStatus.BAD_REQUEST);
         }
 
         Date now = new Date();
@@ -147,6 +151,18 @@ public class AuthController {
             CookieUtil.addCookie(response, REFRESH_TOKEN, authRefreshToken.getToken(), cookieMaxAge);
         }
 
-        return ApiResponse.success("token", newAccessToken.getToken());
+        return ResponseEntity.ok(new Result<>("token", newAccessToken));
+    }
+
+    @Getter
+    @Setter
+    static class Result<T> {
+        private String name;
+        private  T data;
+
+        public Result(String name, T data) {
+            this.name = name;
+            this.data = data;
+        }
     }
 }

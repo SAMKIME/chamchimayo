@@ -1,9 +1,7 @@
 package com.slub.chamchimayo.controller;
 
-import com.slub.chamchimayo.dto.ApiResponse;
 import com.slub.chamchimayo.dto.request.UserUpdateRequest;
 import com.slub.chamchimayo.dto.response.UserResponse;
-import com.slub.chamchimayo.entity.User;
 import com.slub.chamchimayo.oauth.entity.CurrentUser;
 import com.slub.chamchimayo.oauth.entity.UserPrincipal;
 import com.slub.chamchimayo.service.UserService;

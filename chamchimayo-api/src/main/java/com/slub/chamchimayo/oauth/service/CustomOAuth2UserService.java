@@ -1,9 +1,7 @@
 package com.slub.chamchimayo.oauth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.slub.chamchimayo.dto.SessionUser;
 import com.slub.chamchimayo.entity.User;
-import com.slub.chamchimayo.exception.httpbasiceception.NotFoundException;
 import com.slub.chamchimayo.oauth.entity.ProviderType;
 import com.slub.chamchimayo.oauth.entity.RoleType;
 import com.slub.chamchimayo.oauth.entity.UserPrincipal;
@@ -54,10 +52,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // OAuth2UserService
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());
+        log.info("User Info Check before save: {}", userInfo.getAttributes());
+
 
         User savedUser = userRepository.findByUserId(userInfo.getId()).orElse(null);
 
-        log.info("User Info Check before save: {}", savedUser);
+        log.info("Find User Info Check before save: {}", savedUser);
 
         if (savedUser != null) {
             if (providerType != savedUser.getProviderType()) {
@@ -86,6 +86,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             .email(userInfo.getEmail())
             .providerType(providerType)
             .gender(userInfo.getGender())
+            .mobile(userInfo.getMobile())
             .roleType(RoleType.USER)
             .build();
 
