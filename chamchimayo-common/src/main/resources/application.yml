@@ -1,18 +1,19 @@
 spring:
   profiles:
     include: oauth
-
+  # 데이터 소스 설정
   datasource:
-    url: jdbc:mysql://localhost:3306/chamchimayo?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: test123
+    url: jdbc:mysql://db-9a75i.pub-cdb.ntruss.com:3306/chamchimayo?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: user
+    password: Samkim2!
     driver-class-name: com.mysql.cj.jdbc.Driver
   #  jackson:
   #    property-naming-strategy: SNAKE_CASE
 
+  # JPA 설정
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -20,6 +21,8 @@ spring:
         format_sql: true
     database: mysql
 
-logging.level:
-  org.hibernate.SQL: info
-#    org.hibernate.type: trace
+logging:
+  level:
+    org:
+      hibernate :
+        SQL : info
