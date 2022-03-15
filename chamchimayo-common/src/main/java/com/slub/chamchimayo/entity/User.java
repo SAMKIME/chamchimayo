@@ -1,13 +1,16 @@
 package com.slub.chamchimayo.entity;
 
+import com.slub.chamchimayo.oauth.entity.ProviderType;
+import com.slub.chamchimayo.oauth.entity.RoleType;
 import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
+import javax.validation.constraints.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
 
+@ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
 @Entity
 public class User {
 
@@ -15,17 +18,26 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column
     private Long id;
 
+    @NotNull
+    @Column(name = "user_id")
+    private String userId;
+
+    @NotNull
+    @Column
+    private String password;
+
+    @NotNull
     @Column
     private String name;
 
+    @NotNull
+    @Column
+    private String email;
+
     @Column
     private String gender;
-
-    @Column(nullable = false)
-    private String email;
 
     @Column
     private String mobile;
@@ -33,14 +45,37 @@ public class User {
     @Column
     private String area;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_type")
+    private RoleType roleType;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider_type")
+    private ProviderType providerType;
+
     @Builder
-    public User(String name, String gender, String email, String mobile, String area) {
-            validateName(name);
-            this.name = name;
-            this.gender = gender;
-            this.email = email;
-            this.mobile = mobile;
-            this.area = area;
+    public User(
+        String userId,
+        String name,
+        String email,
+        String gender,
+        String mobile,
+        String area,
+        RoleType roleType,
+        ProviderType providerType) {
+
+        validateName(name);
+        this.userId = userId;
+        this.password = "NO_PASSWORD";
+        this.name = name;
+        this.email = email;
+        this.gender = gender;
+        this.mobile = mobile;
+        this.area = area;
+        this.roleType = roleType;
+        this.providerType = providerType;
     }
 
     private void validateName(String name) {
@@ -63,5 +98,11 @@ public class User {
 
     public void changeArea(String area) {
         this.area = area;
+    }
+
+    public User updateUser(String name, String gender) {
+        this.name = name;
+        this.gender = gender;
+        return this;
     }
 }

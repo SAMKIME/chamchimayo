@@ -1,20 +1,21 @@
 package com.slub.chamchimayo.controller;
 
-import com.slub.chamchimayo.dto.UserUpdateRequest;
-import com.slub.chamchimayo.dto.UserResponse;
-import com.slub.chamchimayo.entity.User;
+import com.slub.chamchimayo.dto.request.UserUpdateRequest;
+import com.slub.chamchimayo.dto.response.UserResponse;
+import com.slub.chamchimayo.oauth.entity.CurrentUser;
+import com.slub.chamchimayo.oauth.entity.UserPrincipal;
 import com.slub.chamchimayo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping("/users")
 public class UserController {
-    
+
     private final UserService userService;
 
     @PostMapping("/create")
@@ -39,5 +40,11 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<UserResponse> getUser(@CurrentUser UserPrincipal userPrincipal) {
+        UserResponse userResponse = userService.getUser(userPrincipal.getUserId());
+        return ResponseEntity.ok(userResponse);
     }
 }

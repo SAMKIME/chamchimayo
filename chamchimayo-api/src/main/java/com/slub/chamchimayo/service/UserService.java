@@ -1,12 +1,15 @@
 package com.slub.chamchimayo.service;
 
 
-import com.slub.chamchimayo.dto.UserUpdateRequest;
-import com.slub.chamchimayo.dto.UserResponse;
+import com.slub.chamchimayo.dto.request.UserUpdateRequest;
+import com.slub.chamchimayo.dto.response.UserResponse;
 import com.slub.chamchimayo.entity.User;
 import com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage;
+import com.slub.chamchimayo.exception.httpbasiceception.NotFoundException;
 import com.slub.chamchimayo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,4 +71,9 @@ public class UserService {
                 .build();
     }
 
+    public UserResponse getUser(String userId) {
+        Optional<User> findByUserId = userRepository.findByUserId(userId);
+        User user = findByUserId.orElseThrow(ExceptionWithCodeAndMessage.NOT_FOUND_USER::getException);
+        return UserResponse.of(user);
+    }
 }

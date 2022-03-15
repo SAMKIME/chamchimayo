@@ -1,22 +1,25 @@
 spring:
+  profiles:
+    include: oauth
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/chamchimayo?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: test123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  #  jackson:
+  #    property-naming-strategy: SNAKE_CASE
+
   jpa:
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
-#        show_sql: true
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show_sql: true
         format_sql: true
-    hibernate:
-      ddl-auto: create
-  datasource:
-    url: jdbc:mysql://localhost:3306/slub?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jackson:
-    property-naming-strategy: SNAKE_CASE
-logging:
-  level:
-    root: info
-    org:
-      hibernate:
-        SQL: debug
-        type.descriptor.sql.BasicBinder: trace
+    database: mysql
+
+logging.level:
+  org.hibernate.SQL: info
+#    org.hibernate.type: trace
