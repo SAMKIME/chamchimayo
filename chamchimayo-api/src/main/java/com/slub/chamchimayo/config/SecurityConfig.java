@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
             .and()
                 .redirectionEndpoint()
-                .baseUri("/*/oauth2/code/*")
+                .baseUri("/*/oauth2/callback/*")
             .and()
                 .userInfoEndpoint() // oauth2 로그인 성공후 가져올 때의 설정들
                 .userService(oAuth2UserService) // 소셜 로그인 성공 시 후속 조치를 진행할 UserService 인터페스 구현체 등록
