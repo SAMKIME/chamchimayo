@@ -37,4 +37,8 @@ public class AppProperties {
             return this;
         }
     }
+
+    public OAuth2 getOauth2() {
+        return oauth2;
+    }
 }
