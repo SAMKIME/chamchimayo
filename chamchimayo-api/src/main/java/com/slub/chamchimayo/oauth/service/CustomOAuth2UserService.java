@@ -52,8 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // OAuth2UserService
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oAuth2User.getAttributes());
-        log.info("User Info Check before save: {}", userInfo.getAttributes());
-
+        log.info("UserInfo attributes Check before save : {}", userInfo.getAttributes());
 
         User savedUser = userRepository.findByUserId(userInfo.getId()).orElse(null);
 
@@ -71,7 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             savedUser = createUser(userInfo, providerType);
         }
 
-        log.info("Save Or Update After User Login Info Check : {}", savedUser);
+        log.info("Save Or Update After User Login Info : {}", savedUser);
 
         return UserPrincipal.create(savedUser, oAuth2User.getAttributes());
     }
