@@ -1,4 +1,4 @@
-package com.slub.chamchimayo.config;
+package com.slub.chamchimayo.config.security;
 
 import com.slub.chamchimayo.oauth.token.AuthTokenProvider;
 import org.springframework.beans.factory.annotation.Value;

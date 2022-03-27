@@ -1,6 +1,6 @@
 package com.slub.chamchimayo.oauth.handler;
 
-import com.slub.chamchimayo.config.AppProperties;
+import com.slub.chamchimayo.config.properties.AppProperties;
 import com.slub.chamchimayo.entity.UserRefreshToken;
 import com.slub.chamchimayo.oauth.entity.ProviderType;
 import com.slub.chamchimayo.oauth.entity.RoleType;

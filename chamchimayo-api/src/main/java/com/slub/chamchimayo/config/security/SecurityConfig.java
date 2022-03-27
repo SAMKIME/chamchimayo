@@ -1,6 +1,7 @@
-package com.slub.chamchimayo.config;
+package com.slub.chamchimayo.config.security;
 
-import com.slub.chamchimayo.oauth.entity.RoleType;
+import com.slub.chamchimayo.config.properties.AppProperties;
+import com.slub.chamchimayo.config.properties.CorsProperties;
 import com.slub.chamchimayo.oauth.exception.RestAuthenticationEntryPoint;
 import com.slub.chamchimayo.oauth.filter.TokenAuthenticationFilter;
 import com.slub.chamchimayo.oauth.handler.OAuth2AuthenticationFailureHandler;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -44,11 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors()
+        http
+            .cors()
             .and()
                 // stateless한 세션 정책 설정
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 // 개발 편의성을 위해 CSRF 프로텍션 비활성화
                 .csrf().disable()
@@ -58,14 +62,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 // 인증 오류 발생 시 처리를 위한 핸들러 추가
                 .exceptionHandling()
-                    .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
                 .accessDeniedHandler(tokenAccessDeniedHandler)
             .and()
                 // 리소스 별 허용 범위 설정
                 .authorizeRequests()
-                .antMatchers(PUBLIC_URI).permitAll()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode()) // api/** 은 USER권한만 접근 가능
+                .antMatchers(PUBLIC_URI).permitAll()
+//                .antMatchers("/api/**").hasAnyAuthority(RoleType.USER.getCode()) // api/** 은 USER권한만 접근 가능
 //                .antMatchers("/api/**/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode()) ///api/**/admin/**은 admin만 접근 가능
                 .anyRequest().authenticated()
             .and()

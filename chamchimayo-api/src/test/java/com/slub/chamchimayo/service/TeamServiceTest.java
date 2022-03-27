@@ -6,7 +6,6 @@ import static org.mockito.BDDMockito.given;
 
 import com.slub.chamchimayo.dto.request.TeamRequest;
 import com.slub.chamchimayo.dto.response.TeamResponse;
-import com.slub.chamchimayo.entity.Team;
 import com.slub.chamchimayo.repository.TeamRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
