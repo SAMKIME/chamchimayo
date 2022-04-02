@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/chamchimayo?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: test123
+    password: sibal
     driver-class-name: com.mysql.cj.jdbc.Driver
   #  jackson:
   #    property-naming-strategy: SNAKE_CASE
