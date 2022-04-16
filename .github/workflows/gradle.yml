@@ -51,7 +51,7 @@ jobs:
 
       - name: Code Deploy
         run: aws deploy create-deployment 
-          --application-name project-deploy
+          --application-name slub-backend-deploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name develop
+          --deployment-group-name slub-backend-deploy-group
           --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
