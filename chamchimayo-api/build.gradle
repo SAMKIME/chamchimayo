@@ -45,4 +45,8 @@ dependencies {
     build {
         dependsOn copyDocument
     }
+
+}
+jar {
+    enabled = false
 }
