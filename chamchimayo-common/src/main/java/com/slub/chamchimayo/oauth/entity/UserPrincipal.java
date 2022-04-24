@@ -4,7 +4,6 @@ import com.slub.chamchimayo.entity.User;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

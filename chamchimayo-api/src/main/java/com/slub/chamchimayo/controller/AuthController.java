@@ -1,8 +1,10 @@
 package com.slub.chamchimayo.controller;
 
-import static com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage.*;
+import static com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage.INVALID_ACCESS_TOKEN;
+import static com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage.INVALID_REFRESH_TOKEN;
+import static com.slub.chamchimayo.exception.ExceptionWithCodeAndMessage.NOT_EXPIRED_TOKEN_YET;
 
-import com.slub.chamchimayo.config.AppProperties;
+import com.slub.chamchimayo.config.properties.AppProperties;
 import com.slub.chamchimayo.dto.request.AuthReqModel;
 import com.slub.chamchimayo.entity.UserRefreshToken;
 import com.slub.chamchimayo.oauth.entity.RoleType;

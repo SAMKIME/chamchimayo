@@ -1,4 +1,4 @@
-package com.slub.chamchimayo.config;
+package com.slub.chamchimayo.config.properties;
 
 import java.util.ArrayList;
 import java.util.List;

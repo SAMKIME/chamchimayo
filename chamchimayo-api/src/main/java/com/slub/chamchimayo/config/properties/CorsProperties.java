@@ -1,4 +1,4 @@
-package com.slub.chamchimayo.config;
+package com.slub.chamchimayo.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;
