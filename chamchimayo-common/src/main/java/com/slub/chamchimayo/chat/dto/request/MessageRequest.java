@@ -2,12 +2,11 @@ package com.slub.chamchimayo.chat.dto.request;
 
 import com.slub.chamchimayo.chat.entity.Message;
 import com.slub.chamchimayo.chat.enumclass.MessageType;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
 public class MessageRequest {
 
     private Long id;
@@ -22,19 +21,6 @@ public class MessageRequest {
 
     private String timestamp;
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @Builder
     public Message toEntity() {
         return Message.builder()
                 .type(this.type)
@@ -43,5 +29,17 @@ public class MessageRequest {
                 .content(this.content)
                 .timestamp(this.timestamp)
                 .build();
+    }
+
+    public void parsing() {
+        this.timestamp = LocalDateTime.now().toString();
+        if(this.type == MessageType.ENTER){
+            this.content = this.sender + "님이 입장하셨습니다.";
+            this.sender = "[알림]";
+        }
+        else if(this.type == MessageType.EXIT) {
+            this.content = this.sender + "님이 퇴장하셨습니다.";
+            this.sender = "[알림]";
+        }
     }
 }

@@ -4,7 +4,6 @@ import com.slub.chamchimayo.chat.constants.KafkaConstants;
 import com.slub.chamchimayo.chat.dto.request.MessageRequest;
 import com.slub.chamchimayo.chat.dto.response.MessageResponse;
 import com.slub.chamchimayo.chat.entity.Message;
-import com.slub.chamchimayo.chat.enumclass.MessageType;
 import com.slub.chamchimayo.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -27,15 +25,7 @@ public class ChatService {
 
     public void sendMessage(MessageRequest messageRequest) {
 
-        messageRequest.setTimestamp(LocalDateTime.now().toString());
-        if(messageRequest.getType() == MessageType.ENTER){
-            messageRequest.setContent(messageRequest.getSender() + "님이 입장하셨습니다.");
-            messageRequest.setSender("[알림]");
-        }
-        else if(messageRequest.getType() == MessageType.EXIT) {
-            messageRequest.setContent(messageRequest.getSender() + "님이 퇴장하셨습니다.");
-            messageRequest.setSender("[알림]");
-        }
+        messageRequest.parsing();
         Message message = chatRepository.save(messageRequest.toEntity());
         try {
             // post 요청으로 전달받은 메시지를 해당 카프카 토픽에 생산
