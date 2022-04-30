@@ -10,7 +10,7 @@ cp $PRIVATE_PATH/application-oauth.yml $API_RESOURCE_PATH
 
 COMMON_RESOURCE_PATH=$REPOSITORY/chamchimayo-common/src/main/resources
 echo  "> move private file : application.yml"
-cp $PRIVATE_PATH/application-oauth.yml $COMMON_RESOURCE_PATH
+cp $PRIVATE_PATH/application.yml $COMMON_RESOURCE_PATH
 
 echo "> go to chamchimayo directory"
 cd $REPOSITORY
