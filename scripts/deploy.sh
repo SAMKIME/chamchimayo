@@ -3,10 +3,14 @@
 REPOSITORY=/home/ubuntu/chamchimayo
 APP_NAME=chamchimayo-api
 
-PRIVATE_PATH=/home/ubuntu/privateFile/application-oauth.yml
+PRIVATE_PATH=/home/ubuntu/privateFile
 API_RESOURCE_PATH=$REPOSITORY/$APP_NAME/src/main/resources
-echo  "> move private file : application-oauth"
-cp $PRIVATE_PATH $API_RESOURCE_PATH
+echo  "> move private file : application-oauth.yml"
+cp $PRIVATE_PATH/application-oauth.yml $API_RESOURCE_PATH
+
+COMMON_RESOURCE_PATH=$REPOSITORY/chamchimayo-common/src/main/resources
+echo  "> move private file : application.yml"
+cp $PRIVATE_PATH/application-oauth.yml $COMMON_RESOURCE_PATH
 
 echo "> go to chamchimayo directory"
 cd $REPOSITORY
@@ -29,7 +33,7 @@ else
         sleep 5
 fi
 
-echo "> 새 애플리케이션 배포 : $JAR_PATH"
-echo "> JAR name : $JAR_NAME"
-
-nohup java -jar $JAR_PATH 3>&1 &
+#echo "> 새 애플리케이션 배포 : $JAR_PATH"
+#echo "> JAR name : $JAR_NAME"
+#
+#nohup java -jar $JAR_PATH 3>&1 &
