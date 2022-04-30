@@ -18,26 +18,26 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-@WebMvcTest(LoginController.class)
-@AutoConfigureRestDocs
+//@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
+//@WebMvcTest(LoginController.class)
+//@AutoConfigureRestDocs
 public class LoginControllerTest extends CommonApiTest{
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    UserRepository userRepository;
-
-    @MockBean
-    UserRefreshTokenRepository userRefreshTokenRepository;
-
-    @MockBean
-    UserService userService;
-
-    @Test
-    void helloRestdoc() throws Exception {
-        mockMvc.perform(get("/hello"))
-            .andExpect(status().isOk())
-            .andDo(print());
-    }
+//    @Autowired
+//    private MockMvc mockMvc;
+//
+//    @MockBean
+//    UserRepository userRepository;
+//
+//    @MockBean
+//    UserRefreshTokenRepository userRefreshTokenRepository;
+//
+//    @MockBean
+//    UserService userService;
+//
+//    @Test
+//    void helloRestdoc() throws Exception {
+//        mockMvc.perform(get("/hello"))
+//            .andExpect(status().isOk())
+//            .andDo(print());
+//    }
 }
